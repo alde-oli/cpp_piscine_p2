@@ -4,19 +4,14 @@
 //constructors and destructor//
 ///////////////////////////////
 
-Span::Span(unsigned int N)
-	: _N(N), _v(N)
+Span::Span(unsigned int n)
+	: _N(n)
 {
 }
 
-Span::Span(unsigned int N, std::initializer_list<int> list)
-	: _N(N), _v(list)
+Span::Span(const Span& copy)
 {
-}
-
-Span::Span(Span const &other)
-	: _N(other._N), _v(other._v)
-{
+	*this = copy;
 }
 
 Span::~Span()
@@ -27,28 +22,62 @@ Span::~Span()
 //operators overload//
 //////////////////////
 
-Span	&Span::operator=(Span const &other)
+Span	&Span::operator=(const Span& copy)
 {
-	if (this != &other)
-	{
-		_v = other._v;
-	}
-	return (*this);
-}
-
-int	&Span::operator[](unsigned int i)
-{
-	if (i >= this->_N)
-		throw Span::OutOfRangeExcetion();
-	return this->_v[i];
+	_N = copy._N;
+	_set = copy._set;
+	return *this;
 }
 
 ////////////////////
 //member functions//
 ////////////////////
 
-void	Span::addNumber(int i)
+void	Span::addNumber(int n)
 {
-	if (this->_v.size() < this->_N)
-		
+	if (_set.size() >= _N)
+		throw SpanFullException();
+	_set.insert(n);
+}
+
+int		Span::shortestSpan()
+{
+	if (_set.size() <= 1)
+		throw SpanEmptyException();
+	std::multiset<int>::iterator	it = _set.begin();
+	std::multiset<int>::iterator	it2 = _set.begin();
+	it2++;
+	int	span = *it2 - *it;
+	while (it2 != _set.end())
+	{
+		if (*it2 - *it < span)
+			span = *it2 - *it;
+		it++;
+		it2++;
+	}
+	return span;
+}
+
+int		Span::longestSpan()
+{
+	if (_set.size() <= 1)
+		throw SpanEmptyException();
+	std::multiset<int>::iterator	it = _set.begin();
+	std::multiset<int>::iterator	it2 = _set.end();
+	it2--;
+	return *it2 - *it;
+}
+
+////////////////////////
+//exception definition//
+////////////////////////
+
+const char*	Span::SpanFullException::what() const throw()
+{
+	return "Span is full";
+}
+
+const char*	Span::SpanEmptyException::what() const throw()
+{
+	return "Span contains less than 2 elements";
 }

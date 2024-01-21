@@ -1,42 +1,47 @@
 #ifndef SPAN_HPP
 # define SPAN_HPP
 
-#include <iostream>
-#include <vector>
-#include <stdexcept>
+# include <iostream>
+# include <set>
+# include <stdexcept>
 
 class Span
 {
 	public:
-		Span(unsigned int N);
-		Span(unsigned int N, std::initializer_list<int> list);
-		Span(Span const &other);
+		Span(unsigned int n);
+		Span(const Span &copy);
 		~Span();
 
-		Span					&operator=(Span const &other);
-		int						&operator[](unsigned int i);
+		Span						&operator=(const Span &copy);
 
-		void					addNumber(int i);
-		void					addNumber(std::array a);
-	
-		int						shortestSpan();
-		int						longestSpan();
+		void						addNumber(int n);
+		template<typename Iterator>
+		void						addNumber(Iterator begin, Iterator end)
+		{
+			if (std::distance(begin, end) > _N)
+				throw SpanFullException();
+			_set.insert(begin, end);
+		}
 
-		class 					OutOfRangeExcetion
+		int							shortestSpan();
+		int							longestSpan();
+
+		class						SpanFullException
 			: public std::exception
 		{
-			virtual const char	*what() const throw();
+			public:
+				virtual const char*	what() const throw();
 		};
-
-		class 					SpanFullExcetion
+		class						SpanEmptyException
 			: public std::exception
 		{
-			virtual const char	*what() const throw();
+			public:
+				virtual const char*	what() const throw();
 		};
 
 	private:
-		const unsigned int		_N;
-		std::vector<int>		_v;
+		unsigned int				_N;
+		std::multiset<int>			_set;
 };
 
 #endif

@@ -1,4 +1,4 @@
-NAME = easyfind
+NAME = MutantStack
 
 CXX = g++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
