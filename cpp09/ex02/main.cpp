@@ -1,40 +1,66 @@
- [M, O, N, K, E, Y, P, U, Z, A, L, Q, C, I, V, B];
+#include "PmergeMe.hpp"
+#include "ctime"
 
-pair
-[(M, O), (N, K), (E, Y), (P, U), (Z, A), (L, Q), (C, I), (V, B)];
+void	solveDeque(int ac, char **av)
+{
+	clock_t		time = clock();
+	std::deque<int> d;
+	try
+	{
+		d = parseInputDeque(ac, av);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	d = PmergeMDeque(d);
+	time = clock() - time;
 
-sort
-[(M, O), (K, N), (E, Y), (P, U), (A, Z), (L, Q), (C, I), (B, V)];
+	std::cout << "Before: ";
+	for (int i = 1; i < ac; ++i)
+		std::cout << av[i] << " ";
+	std::cout << std::endl;
 
-split
-[M, K, E, P, A, L, C, B]  [O, N, Y, U, Z, Q, I, V];
+	std::cout << "After: ";
+	for (std::deque<int>::iterator it = d.begin(); it != d.end(); ++it)
+		std::cout << *it << " ";
+	std::cout << std::endl;
 
-pair
-[(M, K), (E, P), (A, L), (C, B)]  [(O, N), (Y, U), (Z, Q), (I, V)];
+	double time_ms = double(time) / CLOCKS_PER_SEC * 1000000;
 
-sort
-[(K, M), (E, P), (A, L), (B, C)]  [(N, O), (U, Y), (Q, Z), (I, V)];
+	std::cout << "Time to process a range of " << ac - 1 << " elements with std::deque : " << time_ms << "us" << std::endl;
+}
 
-split
-[K, E, A, B] [M, P, L, C] [N, U, Q, I] [O, Y, Z, V];
+void	solveVector(int ac, char **av)
+{
+	clock_t		time = clock();
+	std::vector<int> v;
+	try
+	{
+		v = parseInputVector(ac, av);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+		return ;
+	}
+	v = PmergeMVector(v);
+	time = clock() - time;
 
-pair
-[(K, E), (A, B)] [(M, P), (L, C)] [(N, U), (Q, I)] [(O, Y), (Z, V)];
+	double time_ms = double(time) / CLOCKS_PER_SEC * 1000000;
 
-sort
-[(E, K), (A, B)] [(M, P), (C, L)] [(N, U), (I, Q)] [(O, Y), (V, Z)];
+	std::cout << "Time to process a range of " << ac - 1 << " elements with std::vector : " << time_ms << "us" << std::endl;
+}
 
-split
-[E, A] [K, B] [M, C] [P, L] [N, I] [U, Q] [O, V] [Y, Z];
-
-sort
-[A, E] [B, K] [C, M] [L, P] [I, N] [Q, U] [O, V] [Z, Y]
-
-then we can merge them back together:
-take the two sorted lists, and merge them into a single sorted lists by comparing the first elements of each list,
-and taking the smaller one, and then repeating the process until both lists are empty.
-[A, B, E, K] [C, L, M, P] [I, N, Q, U] [O, V, Y, Z];
-repeat
-[A, B, C, E, K, L, M, P] [I, N, O, Q, U, V, Y, Z];
-repeat
-[A, B, C, E, I, K, L, M, N, O, P, Q, U, V, Y, Z];
+int main(int ac, char **av)
+{
+	if (ac < 2)
+	{
+		std::cout << "Usage: " << av[0] << " [number ...]" << std::endl;
+		return EXIT_FAILURE;
+	}
+	solveDeque(ac, av);
+	solveVector(ac, av);
+	return EXIT_SUCCESS;
+}
