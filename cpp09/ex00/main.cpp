@@ -7,7 +7,7 @@ int main(int ac, char **av)
 		std::cerr << "Error: could not open file" << std::endl;
 		return (1);
 	}
-	std::string     database = "data.csv";
+	std::string     database = "data2.csv";
 	BitcoinExchange *exchange;
 	try
 	{

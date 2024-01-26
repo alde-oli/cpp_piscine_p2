@@ -13,7 +13,7 @@ class InvalidCharacterException
 	: public std::exception
 {
 	public:
-		virtual const char* what(char invalid) const throw();
+		virtual const char* what() const throw();
 };
 
 class MissingNumberException

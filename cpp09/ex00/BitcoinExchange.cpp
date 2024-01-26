@@ -44,9 +44,10 @@ BitcoinExchange::BitcoinExchange(const std::string &btcvalue)
 				v = temp;
 		}
 
-		_btcprice[d] = v;
 		if (v == -3 || d.isValid == false)
 			std::cerr << "Warning: bad input => " << line << std::endl;
+		else
+			_btcprice[d] = v;
 	}
 	file.close();
 }
@@ -142,25 +143,25 @@ std::map<Date, double>::const_iterator	BitcoinExchange::btcpriceEnd() const
 
 void	display(Date const &d, double const &v, std::map<Date, double> const &btcprice)
 {
+
 	if (d.isValid == false || v == -3)
 		std::cout << "Error: bad input => " << d.dateStr << std::endl;
 	else if (v == -2)
 		std::cout << "Error: too large a number." << std::endl;
 	else if (v == -1)
 		std::cout << "Error: not a positive number." << std::endl;
+	else if (d < btcprice.begin()->first)
+		std::cout << "Error: date too low." << std::endl;
 	else
 	{
 		std::map<Date, double>::const_iterator btcPriceIt = btcprice.lower_bound(d);
 		if (btcPriceIt == btcprice.end() || btcPriceIt->first != d)
-		{
 			if (btcPriceIt != btcprice.begin())
 				--btcPriceIt;
-		}
 		std::cout << std::setw(4) << std::setfill('0') << d.year << "-"
 				<< std::setw(2) << std::setfill('0') << d.month << "-"
 				<< std::setw(2) << std::setfill('0') << d.day
-				<< " => " << v << " = "
-				<< ((btcPriceIt != btcprice.end()) ? (v * btcPriceIt->second) : 0) << std::endl;
+				<< " => " << v << " = " << ((btcPriceIt != btcprice.end()) ? (v * btcPriceIt->second) : 0) << std::endl;
 	}
 }
 
@@ -178,6 +179,7 @@ void BitcoinExchange::showValue(std::string const &ownedbtc) const
 	if (!file.is_open())
 		throw FileError();
 
+	std::getline(file, line);
 	while (std::getline(file, line))
 	{
 		d.dateStr = line;

@@ -72,11 +72,9 @@ void	RPN(std::string str)
 //exceptions//
 //////////////
 
-const char* InvalidCharacterException::what(char invalid) const throw()
+const char* InvalidCharacterException::what() const throw()
 {
-	std::string msg = "Invalid character: ";
-	msg += invalid;
-	return (msg.c_str());
+	return ("Invalid character");
 }
 
 const char* MissingNumberException::what() const throw()

@@ -1,4 +1,4 @@
-NAME = RPN
+NAME = PmergeMe
 
 CXX = g++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98

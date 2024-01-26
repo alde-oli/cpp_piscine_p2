@@ -3,8 +3,7 @@
 
 void	solveDeque(int ac, char **av)
 {
-	clock_t		time = clock();
-	std::deque<int> d;
+		std::deque<int> d;
 	try
 	{
 		d = parseInputDeque(ac, av);
@@ -14,6 +13,7 @@ void	solveDeque(int ac, char **av)
 		std::cout << e.what() << std::endl;
 		exit(EXIT_FAILURE);
 	}
+	clock_t		time = clock();
 	d = PmergeMDeque(d);
 	time = clock() - time;
 
@@ -34,7 +34,6 @@ void	solveDeque(int ac, char **av)
 
 void	solveVector(int ac, char **av)
 {
-	clock_t		time = clock();
 	std::vector<int> v;
 	try
 	{
@@ -45,6 +44,7 @@ void	solveVector(int ac, char **av)
 		std::cout << e.what() << std::endl;
 		return ;
 	}
+	clock_t		time = clock();
 	v = PmergeMVector(v);
 	time = clock() - time;
 
